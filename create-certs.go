@@ -14,6 +14,8 @@ import (
 	"time"
 )
 
+const SERVER_DOMAIN = "161.156.17.167"
+
 func createCA() (*x509.Certificate, *rsa.PrivateKey) {
 	ca := &x509.Certificate{
 		SerialNumber: big.NewInt(2019),
@@ -31,6 +33,7 @@ func createCA() (*x509.Certificate, *rsa.PrivateKey) {
 		ExtKeyUsage:           []x509.ExtKeyUsage{x509.ExtKeyUsageClientAuth, x509.ExtKeyUsageServerAuth},
 		KeyUsage:              x509.KeyUsageDigitalSignature | x509.KeyUsageCertSign,
 		BasicConstraintsValid: true,
+		DNSNames:              []string{SERVER_DOMAIN},
 	}
 
 	caPrivKey, err := rsa.GenerateKey(rand.Reader, 4096)
@@ -86,6 +89,7 @@ func createCerts(ca *x509.Certificate, caPrivKey *rsa.PrivateKey, keyName string
 		SubjectKeyId: []byte{1, 2, 3, 4, 6},
 		ExtKeyUsage:  []x509.ExtKeyUsage{x509.ExtKeyUsageClientAuth, x509.ExtKeyUsageServerAuth},
 		KeyUsage:     x509.KeyUsageDigitalSignature,
+		DNSNames:     []string{SERVER_DOMAIN},
 	}
 
 	certPrivKey, err := rsa.GenerateKey(rand.Reader, 4096)
